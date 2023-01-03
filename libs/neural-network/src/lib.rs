@@ -1,3 +1,5 @@
+use rand::Rng;
+
 pub struct  Network{
 layers:Vec<Layer>
 }
@@ -20,7 +22,7 @@ impl  Network  {
              layer.propogate(inputs)
             )
     }
-    pub fn random(layers: Vec<LayerTopology>) -> Self {
+    pub fn random(layers: &Vec<LayerTopology>) -> Self {
         let layers = layers
         .windows(2)
         .map(|layers|{
@@ -41,6 +43,17 @@ let output = inputs
 .sum::<f32>();
 (self.bias+output).max(0.0)
     }
+
+    fn random(input_neurons: usize) -> Neuron {
+        let mut rng = rand::thread_rng();
+        
+        let bias = rng.gen_range(-1.0..=1.0);
+
+        let weights = (0..input_neurons)
+        .map(|_| rng.gen_range(-1.0..=1.0))  
+        .collect();
+        Self { bias: bias, weights: weights }
+    }
 }
 
 pub struct  LayerTopology{
@@ -55,17 +68,13 @@ impl  Layer {
        .map(|neuron| neuron.propogate(&inputs))
        .collect()
     }
+
     pub fn random(
         input_neurons: usize,
         output_neurons: usize,
     ) -> Self {
-        let mut neurons = Vec::new();
-
-        for _ in 0..output_neurons {
-            neurons.push(Neuron::random(input_neurons));
-        }
-
-        Self { neurons }
+        let  neurons = (0..output_neurons).map(|_| Neuron::random(input_neurons)).collect();
+        Self { neurons: neurons }
     }
 
 }
