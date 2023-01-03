@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::{Rng};
 
 pub struct  Network{
 layers:Vec<Layer>
@@ -44,8 +44,8 @@ let output = inputs
 (self.bias+output).max(0.0)
     }
 
-    fn random(input_neurons: usize) -> Neuron {
-        let mut rng = rand::thread_rng();
+    fn random(rng:&mut dyn rand::RngCore, input_neurons: usize) -> Neuron {
+
         
         let bias = rng.gen_range(-1.0..=1.0);
 
@@ -55,6 +55,31 @@ let output = inputs
         Self { bias: bias, weights: weights }
     }
 }
+
+
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+    mod random{
+        use approx::assert_relative_eq;
+        use rand::SeedableRng;
+        use rand_chacha::{ ChaCha8Rng};
+
+        use super::*;
+        
+        #[test]
+        fn test(){
+            let mut rng = ChaCha8Rng::from_seed(Default::default());
+            let neuron = Neuron::random(&mut rng,4);
+            assert_relative_eq!(neuron.bias,-0.6255188);
+            assert_relative_eq!(neuron.weights.as_slice(),[0.67383957, 0.8181262, 0.26284897, 0.5238807].as_ref())
+        }
+    }
+}
+
+
+
 
 pub struct  LayerTopology{
     neurons:usize
@@ -73,7 +98,7 @@ impl  Layer {
         input_neurons: usize,
         output_neurons: usize,
     ) -> Self {
-        let  neurons = (0..output_neurons).map(|_| Neuron::random(input_neurons)).collect();
+        let  neurons = (0..output_neurons).map(|_| Neuron::random(&mut rand::thread_rng(),input_neurons)).collect();
         Self { neurons: neurons }
     }
 
