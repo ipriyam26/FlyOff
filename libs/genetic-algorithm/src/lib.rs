@@ -1,16 +1,28 @@
 use rand::{seq::SliceRandom, RngCore};
 
-pub struct GeneticAlgorithm;
+pub struct GeneticAlgorithm<S>{
+    selection_method:S,
+    
+}
 
-impl GeneticAlgorithm {
-    pub fn new() -> Self {
-        Self
+impl <S>GeneticAlgorithm<S>
+where S:SelectionMethod
+{
+    pub fn new(selection_method:S) -> Self {
+        Self{selection_method}
     }
-    pub fn evolve<I>(&self, population: &[I]) -> Vec<I> {
+    pub fn evolve<I>(&self, population: &[I],rng:&mut dyn RngCore) -> Vec<I> 
+    where I:Individual,
+    {
         // we cannot evolve an empty population
         assert!(!population.is_empty());
 
-        (0..population.len()).map(|_| todo!()).collect()
+        (0..population.len()).map(|_| 
+       { 
+        let parent_a = self.selection_method.select(rng, population);
+         let parent_b = self.selection_method.select(rng, population);
+       todo!() }
+        ).collect()
     }
 }
 
