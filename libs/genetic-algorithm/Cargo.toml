@@ -10,3 +10,4 @@ rand="0.8.5"
 
 [dev-dependencies]
 rand_chacha = "0.3.1"
+maplit = "1.0.2"
