@@ -33,7 +33,51 @@ where S:SelectionMethod
 
 pub trait Individual {
     fn fitness(&self) -> f32;
+    fn chromosome(&self) ->&Chromosome;
 }
+
+pub trait CrossoverMethod{
+    fn crossover(
+        &self,
+        rng: &mut dyn RngCore,
+        parent_a:&Chromosome,
+        parent_b :&Chromosome
+    )-> Chromosome;
+}
+
+use rand::Rng;
+
+#[derive(Clone,Debug)]
+pub struct UniformCrossover;
+
+
+impl UniformCrossover {
+    pub fn new()->Self{
+        Self
+    }
+}
+
+
+impl CrossoverMethod for UniformCrossover{
+    fn crossover(
+            &self,
+            rng: &mut dyn RngCore,
+            parent_a:&Chromosome,
+            parent_b :&Chromosome
+        )-> Chromosome {
+            let parent_a = parent_a.iter();
+            let parent_b = parent_b.iter();
+        
+            parent_a
+                .zip(parent_b)
+                .map(|(&a, &b)| if rng.gen_bool(0.5) { a } else { b })
+                .collect()
+
+    }
+}
+
+
+
 
 pub struct RouletteWheelSelection;
 
@@ -127,14 +171,20 @@ impl Individual for TestIndividual {
     fn fitness(&self) -> f32 {
         self.fitness
     }
+
+    fn chromosome(&self) ->&Chromosome {
+        todo!()
+    }
 }
+
+
 
 #[cfg(test)]
 mod tests{
     use std::collections::BTreeMap;
 
     use rand::SeedableRng;
-    use rand_chacha::ChaCha8Rng;
+    use rand_chacha::     ChaCha8Rng;
 
     use super::*;
 
