@@ -2,11 +2,12 @@
 pub mod selection_method {
     use rand::{RngCore, seq::SliceRandom};
 
-    use crate::chromosome::chromosome::Chromosome;
+    use crate::chromosome::{chromosome::Chromosome, self};
 
     pub trait Individual {
         fn fitness(&self) -> f32;
         fn chromosome(&self) -> &Chromosome;
+        fn create(chromosome:Chromosome)->Self;
     }
 
     pub struct RouletteWheelSelection;
@@ -55,6 +56,10 @@ impl Individual for TestIndividual {
     }
 
     fn chromosome(&self) -> &Chromosome {
+        todo!()
+    }
+
+    fn create(chromosome:Chromosome)->Self {
         todo!()
     }
 }

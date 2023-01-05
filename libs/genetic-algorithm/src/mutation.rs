@@ -5,7 +5,7 @@ pub mod mutation_method {
     use rand::{Rng, RngCore};
 
     pub trait MutationMethod {
-        fn mutate(&self, rng: &mut dyn RngCore, child: &mut Chromosome) {}
+        fn mutate(&self, _rng: &mut dyn RngCore, child: &mut Chromosome) {}
     }
 
     pub struct GuassianMutation {
