@@ -1,83 +1,88 @@
-
-
 #![feature(type_alias_impl_trait)]
 use std::ops::Index;
 
 use rand::{seq::SliceRandom, RngCore};
 
-pub struct GeneticAlgorithm<S>{
-    selection_method:S,
-    
+pub struct GeneticAlgorithm<S> {
+    selection_method: S,
+    crossover_method: Box<dyn CrossoverMethod>,
 }
 
-impl <S>GeneticAlgorithm<S>
-where S:SelectionMethod
+impl<S> GeneticAlgorithm<S>
+where
+    S: SelectionMethod,
 {
-    pub fn new(selection_method:S) -> Self {
-        Self{selection_method}
+    pub fn new(selection_method: S, crossover_method: impl CrossoverMethod + 'static) -> Self {
+        Self {
+            selection_method,
+            crossover_method: Box::new(crossover_method),
+        }
     }
-    pub fn evolve<I>(&self, population: &[I],rng:&mut dyn RngCore) -> Vec<I> 
-    where I:Individual,
+    pub fn evolve<I>(&self, population: &[I], rng: &mut dyn RngCore) -> Vec<I>
+    where
+        I: Individual,
     {
         // we cannot evolve an empty population
         assert!(!population.is_empty());
 
-        (0..population.len()).map(|_| 
-       { 
-        let parent_a = self.selection_method.select(rng, population);
-         let parent_b = self.selection_method.select(rng, population);
-       todo!() }
-        ).collect()
+        (0..population.len())
+            .map(|_| {
+                let parent_a = self.selection_method.select(rng, population).chromosome();
+                let parent_b = self.selection_method.select(rng, population).chromosome();
+
+                let child = self.crossover_method.crossover(
+                    rng,
+                    parent_a,
+                    parent_b,
+                );
+
+                todo!()
+            })
+            .collect()
     }
 }
 
 pub trait Individual {
     fn fitness(&self) -> f32;
-    fn chromosome(&self) ->&Chromosome;
+    fn chromosome(&self) -> &Chromosome;
 }
 
-pub trait CrossoverMethod{
+pub trait CrossoverMethod {
     fn crossover(
         &self,
         rng: &mut dyn RngCore,
-        parent_a:&Chromosome,
-        parent_b :&Chromosome
-    )-> Chromosome;
+        parent_a: &Chromosome,
+        parent_b: &Chromosome,
+    ) -> Chromosome;
 }
 
 use rand::Rng;
 
-#[derive(Clone,Debug)]
+#[derive(Clone, Debug)]
 pub struct UniformCrossover;
 
-
 impl UniformCrossover {
-    pub fn new()->Self{
+    pub fn new() -> Self {
         Self
     }
 }
 
-
-impl CrossoverMethod for UniformCrossover{
+impl CrossoverMethod for UniformCrossover {
     fn crossover(
-            &self,
-            rng: &mut dyn RngCore,
-            parent_a:&Chromosome,
-            parent_b :&Chromosome
-        )-> Chromosome {
-            let parent_a = parent_a.iter();
-            let parent_b = parent_b.iter();
-        
-            parent_a
-                .zip(parent_b)
-                .map(|(&a, &b)| if rng.gen_bool(0.5) { a } else { b })
-                .collect()
+        &self,
+        rng: &mut dyn RngCore,
+        parent_a: &Chromosome,
+        parent_b: &Chromosome,
+    ) -> Chromosome {
+        let parent_a = parent_a.iter();
+        let parent_b = parent_b.iter();
 
+        parent_a
+            .zip(parent_b)
+            .map(|(&a, &b)| if rng.gen_bool(0.5) { a } else { b })
+            .collect()
     }
 }
-
-
-
 
 pub struct RouletteWheelSelection;
 
@@ -87,18 +92,13 @@ impl RouletteWheelSelection {
     }
 }
 
-
 pub trait SelectionMethod {
-    fn select<'a, I>(
-       &self,
-       rng: &mut dyn RngCore,
-       population: &'a [I],
-    ) -> &'a I
+    fn select<'a, I>(&self, rng: &mut dyn RngCore, population: &'a [I]) -> &'a I
     where
         I: Individual;
 }
 
-impl  SelectionMethod for RouletteWheelSelection {
+impl SelectionMethod for RouletteWheelSelection {
     fn select<'a, I>(&self, rng: &mut dyn RngCore, population: &'a [I]) -> &'a I
     where
         I: Individual,
@@ -109,21 +109,19 @@ impl  SelectionMethod for RouletteWheelSelection {
     }
 }
 
-
-pub struct Chromosome{
-    genes: Vec<f32>
-
+pub struct Chromosome {
+    genes: Vec<f32>,
 }
 
-impl Chromosome{
-    pub fn len(&self)->usize    {
+impl Chromosome {
+    pub fn len(&self) -> usize {
         self.genes.len()
     }
 
-    pub fn iter(&self)->impl Iterator<Item=&f32>{
+    pub fn iter(&self) -> impl Iterator<Item = &f32> {
         self.genes.iter()
     }
-    pub fn iter_mut(&mut self)->impl Iterator<Item = &mut f32>{
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut f32> {
         self.genes.iter_mut()
     }
 }
@@ -142,7 +140,6 @@ impl FromIterator<f32> for Chromosome {
         }
     }
 }
-
 
 impl IntoIterator for Chromosome {
     type Item = f32;
@@ -172,19 +169,17 @@ impl Individual for TestIndividual {
         self.fitness
     }
 
-    fn chromosome(&self) ->&Chromosome {
+    fn chromosome(&self) -> &Chromosome {
         todo!()
     }
 }
 
-
-
 #[cfg(test)]
-mod tests{
+mod tests {
     use std::collections::BTreeMap;
 
     use rand::SeedableRng;
-    use rand_chacha::     ChaCha8Rng;
+    use rand_chacha::ChaCha8Rng;
 
     use super::*;
 
@@ -225,10 +220,7 @@ mod tests{
 
         #[test]
         fn test() {
-            let chromosome: Chromosome =
-                vec![3.0, 1.0, 2.0]
-                    .into_iter()
-                    .collect();
+            let chromosome: Chromosome = vec![3.0, 1.0, 2.0].into_iter().collect();
 
             assert_eq!(chromosome[0], 3.0);
             assert_eq!(chromosome[1], 1.0);
@@ -237,7 +229,7 @@ mod tests{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         let mut rng = ChaCha8Rng::from_seed(Default::default());
         let method = RouletteWheelSelection::new();
         let population = vec![
@@ -246,12 +238,13 @@ mod tests{
             TestIndividual::new(4.0),
             TestIndividual::new(3.0),
         ];
-        let  actual_histogram: BTreeMap<i32, i32> = 
-        (0..1000).map(|_| method.select(&mut rng, &population)).fold(Default::default(), |mut histogram,individual|{
-            *histogram.entry( individual.fitness() as _).or_default()+=1;
+        let actual_histogram: BTreeMap<i32, i32> = (0..1000)
+            .map(|_| method.select(&mut rng, &population))
+            .fold(Default::default(), |mut histogram, individual| {
+                *histogram.entry(individual.fitness() as _).or_default() += 1;
 
-            histogram
-        });
+                histogram
+            });
 
         let expected_histogram = maplit::btreemap! {
             1=>98,
@@ -260,8 +253,6 @@ mod tests{
             4=>422,
         };
 
-        assert_eq!(actual_histogram,expected_histogram);
-
+        assert_eq!(actual_histogram, expected_histogram);
     }
-
 }
