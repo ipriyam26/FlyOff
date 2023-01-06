@@ -1,11 +1,12 @@
 pub mod chromosome {
     use std::ops::Index;
 
+    #[derive(Clone, Debug)]
     pub struct Chromosome {
         pub(crate) genes: Vec<f32>,
     }
 
-     impl Chromosome {
+    impl Chromosome {
         pub fn len(&self) -> usize {
             self.genes.len()
         }
@@ -21,7 +22,7 @@ pub mod chromosome {
     impl Index<usize> for Chromosome {
         type Output = f32;
 
-         fn index(&self, index: usize) -> &Self::Output {
+        fn index(&self, index: usize) -> &Self::Output {
             &self.genes[index]
         }
     }
@@ -44,38 +45,44 @@ pub mod chromosome {
     }
 
     #[cfg(test)]
+    impl PartialEq for Chromosome {
+        fn eq(&self, other: &Self) -> bool {
+            approx::relative_eq!(self.genes.as_slice(), other.genes.as_slice(),)
+        }
+    }
+
+    #[cfg(test)]
     mod tests {
 
-    
         use super::*;
-    
+
         mod into_iterator {
             use super::*;
-    
+
             #[test]
             fn test() {
                 let chromosome = Chromosome {
                     genes: vec![3.0, 1.0, 2.0],
                 };
-    
+
                 let genes: Vec<_> = chromosome.into_iter().collect();
-    
+
                 assert_eq!(genes.len(), 3);
                 assert_eq!(genes[0], 3.0);
                 assert_eq!(genes[1], 1.0);
                 assert_eq!(genes[2], 2.0);
             }
         }
-    
+
         mod index {
             use super::*;
-    
+
             #[test]
             fn test() {
                 let chromosome = Chromosome {
                     genes: vec![3.0, 1.0, 2.0],
                 };
-    
+
                 assert_eq!(chromosome[0], 3.0);
                 assert_eq!(chromosome[1], 1.0);
                 assert_eq!(chromosome[2], 2.0);
@@ -83,19 +90,15 @@ pub mod chromosome {
         }
         mod from_iterator {
             use super::*;
-    
+
             #[test]
             fn test() {
                 let chromosome: Chromosome = vec![3.0, 1.0, 2.0].into_iter().collect();
-    
+
                 assert_eq!(chromosome[0], 3.0);
                 assert_eq!(chromosome[1], 1.0);
                 assert_eq!(chromosome[2], 2.0);
             }
         }
-
     }
-    
-
-
 }
