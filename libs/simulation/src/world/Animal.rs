@@ -14,7 +14,7 @@ impl Animal {
         self.rotation
     }
 
-    pub fn random(rng: &mut dyn RngCore) -> Animal {
+    pub(crate) fn random(rng: &mut dyn RngCore) -> Animal {
         Self {
             position: rng.gen(),
             rotation: rng.gen(),

@@ -2,3 +2,5 @@
 members = [
     "libs/*", # look má, wildcards!
 ]
+# [package]
+ 

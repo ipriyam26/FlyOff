@@ -1,7 +1,8 @@
-mod animal;
-use animal::Animal;
 mod food;
-use food::Food;
+pub use food::Food;
+mod animal;
+pub use animal::Animal;
+
 use rand::RngCore;
 
 // use food::Food;
@@ -11,6 +12,7 @@ pub struct World {
     animals: Vec<Animal>,
     foods: Vec<Food>,
 }
+
 impl World {
     pub fn animal(&self) -> &[Animal] {
         &self.animals

@@ -3,7 +3,8 @@
 
 mod world;
 use rand::{RngCore};
-use world::World;
+pub use world::{World,Animal,Food};
+
 
 pub struct Simulation {
     world: World,
