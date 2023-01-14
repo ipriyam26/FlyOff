@@ -11,41 +11,44 @@ const viewport = document.getElementById("viewport");
 const ctxt = viewport.getContext('2d');
 const viewportWidth = viewport.width;
 const viewportHight = viewport.height;
-ctxt.fillStyle = 'rgb(255,0,0)';
 CanvasRenderingContext2D.prototype.drawCircle =
-    function (x, y, radius) {
+function (x, y, radius) {
+        ctxt.fillStyle = 'rgb(116, 211, 174)';
+
         this.beginPath();
         this.arc(x, y, radius, 0, 2.0 * Math.PI);
-
-
-        this.fillStyle = 'rgb(0, 0, 0)';
+        
+        
+        // this.fillStyle = 'rgb(0, 0, 0)';
         this.fill();
+
     };
 
 CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation) {
     this.beginPath();
-
+    this.fillStyle = 'rgb(234, 190, 124)';
     this.moveTo(
         x - Math.sin(rotation) * size,
         y + Math.cos(rotation) * size,
-    );
-
-    this.lineTo(
-        x - Math.sin(rotation + 2.0 / 3.0 * Math.PI) * size,
-        y + Math.cos(rotation + 2.0 / 3.0 * Math.PI) * size,
-    );
-
-    this.lineTo(
-        x - Math.sin(rotation + 4.0 / 3.0 * Math.PI) * size,
-        y + Math.cos(rotation + 4.0 / 3.0 * Math.PI) * size,
-    );
-
-    this.lineTo(
-        x - Math.sin(rotation) * size,
-        y + Math.cos(rotation) * size,
-    );
-
-    this.stroke();
+        );
+        
+        this.lineTo(
+            x - Math.sin(rotation + 2.0 / 3.0 * Math.PI) * size,
+            y + Math.cos(rotation + 2.0 / 3.0 * Math.PI) * size,
+            );
+            
+            this.lineTo(
+                x - Math.sin(rotation + 4.0 / 3.0 * Math.PI) * size,
+                y + Math.cos(rotation + 4.0 / 3.0 * Math.PI) * size,
+                );
+                
+                this.lineTo(
+                    x - Math.sin(rotation) * size,
+                    y + Math.cos(rotation) * size,
+                    );
+                    
+                    this.stroke();
+                    this.fill();
 };
 
 
@@ -53,11 +56,11 @@ function redraw() {
     ctxt.clearRect(0, 0, viewportWidth, viewportHight);
     simulation.step();
 
-    for(const food of simulation.world().foods){
+    for (const food of simulation.world().foods) {
         ctxt.drawCircle(
             food.x * viewportWidth,
             food.y * viewportHight,
-            (0.01/2.0)*viewportWidth
+            (0.01 / 2.0) * viewportWidth
         )
     }
 
