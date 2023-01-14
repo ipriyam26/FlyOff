@@ -3,7 +3,7 @@ use rand::{Rng, RngCore};
 
 #[derive(Debug)]
 pub struct Food {
-    position: na::Point2<f32>,
+    pub position: na::Point2<f32>,
 }
 impl Food {
     pub fn position(&self) -> na::Point2<f32> {
