@@ -9,8 +9,8 @@ use rand::RngCore;
 
 #[derive(Debug)]
 pub struct World {
-    animals: Vec<Animal>,
-    foods: Vec<Food>,
+   pub animals: Vec<Animal>,
+   pub foods: Vec<Food>,
 }
 
 impl World {

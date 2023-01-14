@@ -8,13 +8,20 @@ const simulation = new sim.Simulation();
 const viewport = document.getElementById("viewport");
 
 
-
-
-
 const ctxt = viewport.getContext('2d');
 const viewportWidth = viewport.width;
 const viewportHight = viewport.height;
 ctxt.fillStyle = 'rgb(255,0,0)';
+CanvasRenderingContext2D.prototype.drawCircle =
+    function (x, y, radius) {
+        this.beginPath();
+        this.arc(x, y, radius, 0, 2.0 * Math.PI);
+
+
+        this.fillStyle = 'rgb(0, 0, 0)';
+        this.fill();
+    };
+
 CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation) {
     this.beginPath();
 
@@ -42,13 +49,27 @@ CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation
 };
 
 
+function redraw() {
+    ctxt.clearRect(0, 0, viewportWidth, viewportHight);
+    simulation.step();
 
+    for(const food of simulation.world().foods){
+        ctxt.drawCircle(
+            food.x * viewportWidth,
+            food.y * viewportHight,
+            (0.01/2.0)*viewportWidth
+        )
+    }
 
-for (const animal of simulation.world().animals) {
-    ctxt.drawTriangle(
-        animal.x * viewportWidth,
-        animal.y * viewportHight,
-        0.01 * viewportWidth,
-        animal.rotation
-    );
+    for (const animal of simulation.world().animals) {
+        // console.log(animal)
+        ctxt.drawTriangle(
+            animal.x * viewportWidth,
+            animal.y * viewportHight,
+            0.01 * viewportWidth,
+            animal.rotation
+        );
+    }
+    requestAnimationFrame(redraw);
 }
+redraw();

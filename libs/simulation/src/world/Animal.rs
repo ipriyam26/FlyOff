@@ -2,9 +2,9 @@ use nalgebra as na;
 use rand::{Rng, RngCore};
 #[derive(Debug)]
 pub struct Animal {
-    position: na::Point2<f32>,
-    rotation: na::Rotation2<f32>,
-    speed: f32,
+    pub position: na::Point2<f32>,
+    pub rotation: na::Rotation2<f32>,
+    pub speed: f32,
 }
 impl Animal {
     pub fn position(&self) -> na::Point2<f32> {
