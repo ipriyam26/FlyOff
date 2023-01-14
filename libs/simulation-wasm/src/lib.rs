@@ -24,7 +24,7 @@ impl Simulation {
 
     pub fn world(&self) -> JsValue {
         let world = World::from(self.sim.world());
-        JsValue::from_serde(&world).unwrap()
+        serde_wasm_bindgen::to_value(&world).unwrap()
     }
 }
 
@@ -44,6 +44,7 @@ impl From<&sim::World> for World {
 pub struct Animal {
     pub x: f32,
     pub y: f32,
+    pub rotation: f32,
 }
 
 impl From<&sim::Animal> for Animal {
@@ -51,6 +52,7 @@ impl From<&sim::Animal> for Animal {
         Self {
             x: value.position().x,
             y: value.position().y,
+            rotation: value.rotation().angle(),
         }
     }
 }
