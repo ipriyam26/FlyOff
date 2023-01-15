@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 nalgebra = { version = "0.31.4", features = ["rand-no-std"] }
 rand = "0.8"
+
+[dev-dependencies]
+test-case = "2.2.2"
