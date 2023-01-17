@@ -16,6 +16,7 @@ let minimum_acc = []
 let average_acc = []
 let maximum_acc = []
 let labels = []
+let generation = 1;
 
 CanvasRenderingContext2D.prototype.drawCircle =
     function (x, y, radius) {
@@ -42,21 +43,21 @@ let chart = new Chart(ctx, {
             data: minimum_acc,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
+            borderWidth: 2
         },
         {
             label: 'Maximum',
             data: maximum_acc,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
+            borderWidth: 2
         },
         {
             label: 'Average',
             data: average_acc,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
+            borderWidth: 2
         }]
     },
     responsive: true,
@@ -69,22 +70,16 @@ let chart = new Chart(ctx, {
         }]
     }
 });
-
-
-
+document.getElementById("gener").innerText = generation;
 let statsistic = "Updating value in a while";
 document.getElementById('train').onclick = function () {
     statsistic = simulation.train();
     let result = parse();
+    generation += 10;
+    document.getElementById("gener").innerText = generation
     document.getElementById('min').innerText = result[0];
     document.getElementById('max').innerText = result[1];
     document.getElementById('avg').innerText = result[2];
-
-    // if (chart && chart.destroy) {
-    //     chart.destroy();
-    // }
-
-
     chart.data.datasets[0].data = minimum_acc;
     chart.data.datasets[1].data = maximum_acc;
     chart.data.datasets[2].data = average_acc;
@@ -122,12 +117,16 @@ CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation
 };
 
 
-
-
+let step_count = 0;
 
 function redraw() {
     ctxt.clearRect(0, 0, viewportWidth, viewportHight);
     simulation.step();
+    step_count += 1;
+    if (step_count % 2500 == 0) {
+        generation += 1;
+        step_count = 0;
+    }
 
     for (const food of simulation.world().foods) {
         ctxt.drawCircle(
