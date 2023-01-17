@@ -1,13 +1,17 @@
-use rand::Rng;
+use rand::{Rng, RngCore};
 
+#[derive(Clone, Debug)]
 pub struct Network {
     layers: Vec<Layer>,
 }
 
+#[derive(Clone, Debug)]
 struct Neuron {
     bias: f32,
     weights: Vec<f32>,
 }
+
+#[derive(Clone, Debug)]
 struct Layer {
     neurons: Vec<Neuron>,
 }
@@ -19,7 +23,7 @@ impl Network {
             .iter()
             .fold(inputs, |inputs, layer| layer.propogate(inputs))
     }
-    pub fn random(layers: &Vec<LayerTopology>) -> Self {
+    pub fn random(rng: &mut dyn RngCore, layers: &[LayerTopology]) -> Self {
         let layers = layers
             .windows(2)
             .map(|layers| Layer::random(layers[0].neurons, layers[1].neurons))
@@ -87,10 +91,7 @@ mod tests {
 
             // a simple check for relu to work
 
-            assert_relative_eq!(
-                neuron.propogate(&vec![0.4, -1.0]),
-                0.0 
-            );
+            assert_relative_eq!(neuron.propogate(&vec![0.4, -1.0]), 0.0);
 
             assert_relative_eq!(
                 neuron.propogate(&vec![0.5, 1.0]),
@@ -101,7 +102,7 @@ mod tests {
 }
 
 pub struct LayerTopology {
-    neurons: usize,
+   pub neurons: usize,
 }
 
 impl Layer {

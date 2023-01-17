@@ -1,5 +1,5 @@
-use nalgebra as na;
-use rand::{Rng, RngCore};
+use crate::*;
+
 
 #[derive(Debug)]
 pub struct Food {

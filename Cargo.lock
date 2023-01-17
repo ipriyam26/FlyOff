@@ -74,6 +74,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "lib-neural-network"
+version = "0.1.0"
+dependencies = [
+ "approx",
+ "rand",
+ "rand_chacha",
+]
+
+[[package]]
 name = "lib-simulaition-wasm"
 version = "0.1.0"
 dependencies = [
@@ -89,8 +98,12 @@ dependencies = [
 name = "lib-simulation"
 version = "0.1.0"
 dependencies = [
+ "approx",
+ "lib-neural-network",
  "nalgebra",
  "rand",
+ "rand_chacha",
+ "serde",
  "test-case",
 ]
 
@@ -150,15 +163,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "neural-network"
-version = "0.1.0"
-dependencies = [
- "approx",
- "rand",
- "rand_chacha",
 ]
 
 [[package]]
