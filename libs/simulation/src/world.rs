@@ -66,28 +66,59 @@ impl Eye {
         rotation: na::Rotation2<f32>,
         foods: &[Food],
     ) -> Vec<f32> {
-        let mut cells = vec![0.0, self.cells as f32];
+        // let mut cells = vec![0.0, self.cells as f32];
+        // for food in foods {
+        //     let vec = food.position - position;
+        //     let dist = vec.norm();
+        //     if dist >= self.fov_range {
+        //         continue;
+        //     }
+        //     let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
+        //     let angle = angle - rotation.angle();
+        //     let angle = na::wrap(angle, -PI, PI);
+        //     if angle < -self.fov_angle / 2.0 || angle > self.fov_angle {
+        //         continue;
+        //     }
+        //     let angle = angle + self.fov_angle / 2.0;
+        //     let cell = angle / self.fov_angle;
+        //     let cell = cell * (self.cells as f32);
+        //     let cell = (cell as usize).min(cells.len() - 1);
+        //     let energy = (self.fov_range - dist) / self.fov_range;
+
+        //     cells[cell] += energy;
+        // }
+        // cells
+        let mut cells = vec![0.0; self.cells];
+
         for food in foods {
             let vec = food.position - position;
             let dist = vec.norm();
-            if dist >= self.fov_range {
+
+            if dist > self.fov_range {
                 continue;
             }
+
             let angle = na::Rotation2::rotation_between(&na::Vector2::x(), &vec).angle();
             let angle = angle - rotation.angle();
             let angle = na::wrap(angle, -PI, PI);
-            if angle < -self.fov_angle / 2.0 || angle > self.fov_angle {
+
+            if angle < -self.fov_angle / 2.0 || angle > self.fov_angle / 2.0 {
                 continue;
             }
-            let angle = angle + self.fov_angle / 2.0;
-            let cell = angle / self.fov_angle;
-            let cell = cell * (self.cells as f32);
-            let cell = (cell as usize).min(cells.len() - 1);
-            let energy = (self.fov_range - dist) / self.fov_range;
 
-            cells[cell] += energy;
+            let angle = angle + self.fov_angle / 2.0;
+            let cell = angle / self.fov_angle * (self.cells as f32);
+            let cell = (cell as usize).min(cells.len() - 1);
+
+            cells[cell] += (self.fov_range - dist) / self.fov_range;
         }
+
         cells
+
+
+
+
+
     }
 }
 
@@ -115,7 +146,7 @@ mod tests {
         fn run(self) {
             let eye = Eye::new(self.fov_range, self.fov_angle, TEST_EYE_CELLS);
 
-            let actual_vision = eye.process_vision(
+            let actual_vision =  eye.process_vision(
                 na::Point2::new(self.x, self.y),
                 na::Rotation2::new(self.rot),
                 &self.foods,
@@ -146,6 +177,8 @@ mod tests {
                     }
                 })
                 .collect();
+            
+            
             let actual_vision = actual_vision.join("");
 
             assert_eq!(actual_vision, self.expected_vision);
