@@ -10,6 +10,7 @@ nalgebra = { version = "0.31.4", features = ["rand-no-std"] }
 rand = "0.8.5"
 serde = { version = "1.0", features = ["derive"] }
 lib-neural-network = { path = "../neural-network" }
+lib-genetic-algorithm = {path="../genetic-algorithm"}
 [dev-dependencies]
 test-case = "2.2.2"
 approx = "0.5.1"

@@ -9,6 +9,7 @@ pub mod selection_method {
         fn create(chromosome: Chromosome) -> Self;
     }
 
+    #[derive(Clone,Debug,Default)]
     pub struct RouletteWheelSelection;
 
     impl RouletteWheelSelection {
@@ -35,13 +36,11 @@ pub mod selection_method {
     }
 
     #[cfg(test)]
-    #[derive(Clone, Debug,PartialEq)]
+    #[derive(Clone, Debug, PartialEq)]
     pub enum TestIndividual {
         WithChromosome { chromosome: Chromosome },
         WithFitness { fitness: f32 },
     }
-
-
 
     #[cfg(test)]
     impl TestIndividual {

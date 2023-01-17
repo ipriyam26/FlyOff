@@ -13,7 +13,7 @@ pub mod crossover_method {
         ) -> Chromosome;
     }
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, Default)]
     pub struct UniformCrossover;
 
     impl UniformCrossover {

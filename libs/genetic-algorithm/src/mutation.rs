@@ -8,6 +8,7 @@ pub mod mutation_method {
         fn mutate(&self, _rng: &mut dyn RngCore, child: &mut Chromosome) {}
     }
 
+    #[derive(Clone,Debug,Default)]
     pub struct GuassianMutation {
         pub(crate) chance: f32,
         pub(crate) coeff: f32,
