@@ -11,6 +11,7 @@
       }
 #show{
   color: #fbeee0;
+  text-align: center;
 }
 
       #train {
@@ -25,6 +26,7 @@
 
 /* CSS */
 .button-74 {
+  margin: 0 !important;
   background-color: #fbeee0;
   border: 2px solid #422800;
   border-radius: 30px;
@@ -41,6 +43,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  /* margin: auto; */
 }
 
 .button-74:hover {
@@ -53,6 +56,8 @@
 }
 .ok{
   display: flex ;
+  justify-content: space-evenly;
+
 }
 
 
@@ -70,7 +75,8 @@ table {
 
 th, td {
   border: 1px solid black;
-  padding: 8px;
+  padding: 4px;
+  padding-left: 8px;
   text-align: left;
 }
 #min, #max, #avg {
@@ -78,7 +84,12 @@ th, td {
 }
 
 #spacer{
-  
+ display: flex;
+ justify-content: space-between;
+ flex-direction: column;
+ /* background: #fbeee0; */
+height:  100%;
+ 
 }
 
 
@@ -88,7 +99,7 @@ th {
 
 
     </style>
-    <title>Hello wasm-pack!</title>
+    <title>FlyOff</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   </head>
@@ -104,10 +115,14 @@ th {
     
       <div id="spacer" >
         <div id="show">
-          <table>
+          <table style="margin-bottom: 10px;">
             <tr style="color: black;">
               <th>Stats</th>
               <th>Value</th>
+            </tr>
+            <tr>
+              <td>Generation</td>
+              <td id="gener" ></td>
             </tr>
             <tr>
               <td>Minimum accuray</td>
@@ -123,9 +138,20 @@ th {
             </tr>
           </table>
           <button id="train" class="button-74">Train 10 generations</button>
+         <div style="margin: auto;">
+          <h4 style="font-size: medium;">Welcome to our bird training simulator! </h4>
+
+<div style="font-size: medium; width: 500px; margin: auto;">
+  <p>Here you can observe the birds in real time, and use the genetic algorithm to train them to fly and eat food. Through the process of natural selection, this allows the best birds to survive and evolve over generations. </p>
+  
+  <p>You can advance the birds' generations by clicking the button at the top of the page. Watch as they become smarter and more proficient in flying and eating food! </p>
+  
+  <p>Enjoy exploring the simulation and training the birds!</p>
+</div>
+         </div>
         </div>
 
-        <canvas id="myChart" width="600" height="400" ></canvas>
+        <canvas id="myChart" width="600" height="350" ></canvas>
       </div>
     </div>
   </div>
