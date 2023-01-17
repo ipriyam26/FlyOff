@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      #viewport{
+        border: 1px solid #fbeee0 ;
+      }
+      body{
+        background: #223843;
+      }
+#show{
+  color: #fbeee0;
+}
+
+      #train {
+      /* position: absolute; */
+      top: 100;
+      left: 300;
+      margin: 15px;
+      /* background: rgb(116, 211, 174); */
+      
+  }
+
+
+/* CSS */
+.button-74 {
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-74:hover {
+  background-color: #fff;
+}
+
+.button-74:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+.ok{
+  display: flex ;
+}
+
+
+@media (min-width: 768px) {
+  .button-74 {
+    min-width: 120px;
+    padding: 0 25px;
+  }
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  color: white;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+#min, #max, #avg {
+  font-weight: bold;
+}
+
+#spacer{
+  
+}
+
+
+th {
+  background-color: rgb(116, 211, 174);
+}
+
+
+    </style>
+    <title>Hello wasm-pack!</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </head>
+  <body>
+    
+    <div class="ok" >
+
+    <canvas width="800" height="800" id="viewport">
+
+    </canvas>
+    <div >
+
+    
+      <div id="spacer" >
+        <div id="show">
+          <table>
+            <tr style="color: black;">
+              <th>Stats</th>
+              <th>Value</th>
+            </tr>
+            <tr>
+              <td>Minimum accuray</td>
+              <td id="min"></td>
+            </tr>
+            <tr>
+              <td>Maximum accuracy</td>
+              <td id="max"></td>
+            </tr>
+            <tr>
+              <td>Average accuracy</td>
+              <td id="avg"></td>
+            </tr>
+          </table>
+          <button id="train" class="button-74">Train 10 generations</button>
+        </div>
+
+        <canvas id="myChart" width="600" height="400" ></canvas>
+      </div>
+    </div>
+  </div>
+
+    <script src="./bootstrap.js"></script>
+  </body>
+</html>
