@@ -88,6 +88,17 @@ document.getElementById('train').onclick = function () {
 }
 
 
+CanvasRenderingContext2D.prototype.drawArc = function (x, y, radius, angleFrom, angleTo, style) {
+
+    radius *= viewportWidth;
+
+    this.beginPath();
+    this.arc(x, y, radius, angleFrom, angleTo);
+    this.strokeStyle = style;
+    this.lineWidth = 0.002 * viewportWidth;
+    this.stroke();
+};
+
 
 CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation) {
     this.beginPath();
@@ -137,6 +148,8 @@ function redraw() {
     }
 
     for (const animal of simulation.world().animals) {
+
+        console.log(animal.current_vision);
         // console.log(animal)
         ctxt.drawTriangle(
             animal.x * viewportWidth,
@@ -144,6 +157,33 @@ function redraw() {
             0.01 * viewportWidth,
             animal.rotation
         );
+        //         const FOV_RANGE: f32 = 0.25;
+
+        // const FOV_ANGLE: f32 = PI + FRAC_PI_4;
+
+        // const CELLS: usize = 9;
+
+        const anglePerCell = (Math.PI + Math.PI / 4) / 9;
+
+        for (let cellId = 0; cellId < 9; cellId += 1) {
+            const angleFrom =
+                animal.rotation
+                - 225 / 2.0
+                + cellId * anglePerCell
+                + Math.PI / 2.0;
+
+            const angleTo = angleFrom + anglePerCell;
+            const energy = animal.current_vision[cellId];
+
+            ctxt.drawArc(
+                animal.x * viewportWidth,
+                animal.y * viewportHight,
+                0.01 * 2.5,
+                angleFrom,
+                angleTo,
+                `rgba(0, 255, 128, ${energy})`,
+            );
+        }
     }
     requestAnimationFrame(redraw);
 }

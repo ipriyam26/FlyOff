@@ -6,11 +6,13 @@ pub struct Animal {
     pub rotation: na::Rotation2<f32>,
     pub speed: f32,
     pub eye: Eye,
-    pub satiation:usize,
-    pub brain:Brain,
+    pub satiation: usize,
+    pub brain: Brain,
+    pub current_vision: Vec<f32>,
 }
 impl Animal {
     fn new(eye: Eye, brain: Brain, rng: &mut dyn RngCore) -> Self {
+        let current_vision = vec![0.0; eye.clone().cells()];
         Self {
             position: rng.gen(),
             rotation: rng.gen(),
@@ -18,6 +20,7 @@ impl Animal {
             eye,
             brain,
             satiation: 0,
+            current_vision: current_vision,
         }
     }
 
@@ -28,7 +31,7 @@ impl Animal {
         self.rotation
     }
 
-    pub fn as_chromosome(&self) -> ga::Chromosome{
+    pub fn as_chromosome(&self) -> ga::Chromosome {
         self.brain.as_chromosome()
     }
 

@@ -70,6 +70,7 @@ impl Simulation {
                 animal
                     .eye
                     .process_vision(animal.position, animal.rotation, &self.world.foods);
+            animal.current_vision = vision.clone();
             let response = animal.brain.nn.propogate(vision);
             let speed = response[0].clamp(-SPEED_ACCEL, SPEED_ACCEL);
             let rotation = response[1].clamp(-ROTATION_ACCEL, ROTATION_ACCEL);
