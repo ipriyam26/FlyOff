@@ -2,6 +2,12 @@
 
 Flyoff is a project that uses Rust and WebAssembly (WASM) to train virtual birds to get the most food using a genetic algorithm and a custom neural network.
 
+
+
+https://user-images.githubusercontent.com/79325116/213137988-a7e9a21d-5fdf-423a-a583-b205510a9291.mp4
+
+
+
 ## Prerequisites
 
 - Rust
